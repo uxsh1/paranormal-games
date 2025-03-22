@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>禁忌の記憶 - スタート画面</title>
+  <style>
+    body {
+      background-color: black;
+      color: white;
+      font-family: 'Arial', sans-serif;
+      text-align: center;
+      padding-top: 10%;
+    }
+    #start-button {
+      padding: 15px 30px;
+      font-size: 18px;
+      cursor: pointer;
+      background-color: #444;
+      color: #fff;
+      border: none;
+      margin-top: 20px;
+    }
+    #start-button:hover {
+      background-color: #666;
+    }
+    .intro-text {
+      max-width: 700px;
+      margin: 0 auto;
+      line-height: 1.8;
+      opacity: 0;
+      animation: fadeIn 4s forwards;
+    }
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <div class="intro-text">
+    <p>あなたは都市伝説や超常現象を専門とする記者。</p>
+    <p>ある晩、『忘れられた記憶』という奇妙なメッセージが匿名で送られてきた。</p>
+    <p>「禁じられた真実を知りたければ、朽ち果てた廃施設へ向かえ。ただし、後戻りはできない」</p>
+    <p>好奇心と使命感に突き動かされたあなたは、その夜のうちに現場へ向かった。</p>
+    <p>一歩踏み入れた瞬間、背後で扉が大きな音を立てて閉ざされる。</p>
+    <p>振り返ると、そこにはもう出口はなかった。</p>
+    <p>あなたは生きてこの『忘れられた記憶』を解き明かし、無事に戻れるだろうか――。</p>
+  </div>
+
+  <button id="start-button" onclick="location.href='index.html'">ゲームを始める</button>
+</body>
+</html>
