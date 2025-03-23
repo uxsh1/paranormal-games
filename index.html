@@ -83,7 +83,7 @@
         ]
       },
       {
-        dialogue: "側面の扉から入った途端、罠が作動し、あなたは命を落とした。ゲームオーバー。",
+        dialogue: "側面の扉から入った途端、罠が作動し、あなたは命を落とした。ゲームオーバー.",
         choices: null
       },
       {
@@ -94,7 +94,7 @@
         ]
       },
       {
-        dialogue: "右の回廊は呪われた霧に包まれ、足を踏み入れた瞬間、幻覚に襲われ命を奪われた。ゲームオーバー。",
+        dialogue: "右の回廊は呪われた霧に包まれ、足を踏み入れた瞬間、幻覚に襲われ命を奪われた。ゲームオーバー.",
         choices: null
       },
       {
@@ -105,7 +105,7 @@
         ]
       },
       {
-        dialogue: "立ち止まったその瞬間、後ろから不気味な足音が近づき、あなたは襲われた。ゲームオーバー。",
+        dialogue: "一旦立ち止まったその瞬間、後ろから不気味な足音が近づき、あなたは襲われた。ゲームオーバー.",
         choices: null
       },
       {
@@ -116,7 +116,7 @@
         ]
       },
       {
-        dialogue: "書斎を無視した結果、足元の罠にかかり、命を落とした。ゲームオーバー。",
+        dialogue: "無視して先へ進んだ結果、足元の罠にかかり、命を落とした。ゲームオーバー.",
         choices: null
       },
       {
@@ -127,7 +127,7 @@
         ]
       },
       {
-        dialogue: "扉を叩いた瞬間、仕掛けが作動し、激しい毒ガスが放たれた。ゲームオーバー。",
+        dialogue: "扉を叩いた瞬間、仕掛けが作動し、激しい毒ガスが放たれた。ゲームオーバー.",
         choices: null
       },
       {
@@ -135,66 +135,4 @@
         choices: [
           { text: "装置を調べる", next: 13 },
           { text: "そのまま部屋を出る", next: 14 }
-        ]
-      },
-      {
-        dialogue: "螺旋階段を下りた先は闇に包まれ、あなたは深淵に飲み込まれた。ゲームオーバー。",
-        choices: null
-      },
-      {
-        dialogue: "装置の謎を解いた瞬間、隠されていた秘密が明らかになり、あなたは真実を掴んだ。おめでとう！ゲームクリア。",
-        choices: null
-      },
-      {
-        dialogue: "部屋を出た途端、背後から追い詰められ、あなたは逃げ切れなかった。ゲームオーバー。",
-        choices: null
-      }
-    ];
-
-    let currentIndex = 0;
-
-    function nextDialogue() {
-      // 現在のシーンに選択肢がある場合、次ボタンを隠して選択肢を表示
-      if (story[currentIndex].choices) {
-        document.getElementById('next-button').style.display = 'none';
-        showChoices(story[currentIndex].choices);
-        return;
-      }
-      currentIndex++;
-      if (currentIndex >= story.length) {
-        document.getElementById('dialogue').innerText = "エンディング。ありがとうございました。";
-        document.getElementById('next-button').style.display = 'none';
-        document.getElementById('choices').innerHTML = "";
-        return;
-      }
-      updateDialogue();
-    }
-
-    function updateDialogue() {
-      document.getElementById('dialogue').innerText = story[currentIndex].dialogue;
-      document.getElementById('choices').innerHTML = "";
-      if (story[currentIndex].choices) {
-        document.getElementById('next-button').style.display = 'none';
-        showChoices(story[currentIndex].choices);
-      } else {
-        document.getElementById('next-button').style.display = 'inline-block';
-      }
-    }
-
-    function showChoices(choices) {
-      const choicesDiv = document.getElementById('choices');
-      choicesDiv.innerHTML = "";
-      choices.forEach(choice => {
-        const btn = document.createElement('button');
-        btn.className = 'choice-button';
-        btn.innerText = choice.text;
-        btn.onclick = function() {
-          currentIndex = choice.next;
-          updateDialogue();
-        };
-        choicesDiv.appendChild(btn);
-      });
-    }
-  </script>
-</body>
-</html>
+        ]\n      },\n      {\n        dialogue: \"螺旋階段を下りた先は闇に包まれ、あなたは深淵に飲み込まれた。ゲームオーバー.\",\n        choices: null\n      },\n      {\n        dialogue: \"装置の謎を解いた瞬間、隠されていた秘密が明らかになり、あなたは真実を掴んだ。おめでとう！ゲームクリア.\",\n        choices: null\n      },\n      {\n        dialogue: \"部屋を出た途端、背後から追い詰められ、あなたは逃げ切れなかった。ゲームオーバー.\",\n        choices: null\n      }\n    ];\n\n    let currentIndex = 0;\n\n    function nextDialogue() {\n      // 現在のシーンに選択肢がある場合、次ボタンを隠して選択肢を表示\n      if (story[currentIndex].choices) {\n        document.getElementById('next-button').style.display = 'none';\n        showChoices(story[currentIndex].choices);\n        return;\n      }\n      // ゲームオーバーの場合は「Restart」ボタンを表示\n      if (story[currentIndex].dialogue.indexOf(\"ゲームオーバー\") !== -1) {\n        document.getElementById('next-button').innerText = 'Restart';\n        document.getElementById('next-button').onclick = restartGame;\n        return;\n      }\n      currentIndex++;\n      if (currentIndex >= story.length) {\n        document.getElementById('dialogue').innerText = \"エンディング。ありがとうございました。\";\n        document.getElementById('next-button').style.display = 'none';\n        document.getElementById('choices').innerHTML = \"\";\n        return;\n      }\n      updateDialogue();\n    }\n\n    function updateDialogue() {\n      document.getElementById('dialogue').innerText = story[currentIndex].dialogue;\n      document.getElementById('choices').innerHTML = \"\";\n      if (story[currentIndex].dialogue.indexOf(\"ゲームオーバー\") !== -1) {\n        document.getElementById('next-button').innerText = 'Restart';\n        document.getElementById('next-button').onclick = restartGame;\n        document.getElementById('next-button').style.display = 'inline-block';\n      } else if (story[currentIndex].choices) {\n        document.getElementById('next-button').style.display = 'none';\n        showChoices(story[currentIndex].choices);\n      } else {\n        document.getElementById('next-button').innerText = '次へ';\n        document.getElementById('next-button').onclick = nextDialogue;\n        document.getElementById('next-button').style.display = 'inline-block';\n      }\n    }\n\n    function restartGame() {\n      currentIndex = 0;\n      document.getElementById('next-button').innerText = '次へ';\n      document.getElementById('next-button').onclick = nextDialogue;\n      updateDialogue();\n    }\n\n    function showChoices(choices) {\n      const choicesDiv = document.getElementById('choices');\n      choicesDiv.innerHTML = \"\";\n      // ランダムに選択肢の順番をシャッフルする\n      let shuffled = choices.slice().sort(() => Math.random() - 0.5);\n      shuffled.forEach(choice => {\n        const btn = document.createElement('button');\n        btn.className = 'choice-button';\n        btn.innerText = choice.text;\n        btn.onclick = function() {\n          currentIndex = choice.next;\n          updateDialogue();\n        };\n        choicesDiv.appendChild(btn);\n      });\n    }\n  </script>\n</body>\n</html>\n```\n\n【手順】\n1. VSCodeでこの内容を index.html に保存します。\n2. ターミナルで\n```bash\n   git add . && git commit -m \"ゲームオーバー時にリスタートと、選択肢をランダム化するよう修正\"\n   git push origin main\n```\nを実行してください。\n\nこの更新により、ゲームオーバーになった場合は Restart ボタンが表示され、クリックすると最初に戻るようになり、また、各選択肢がランダムに表示されます。どのように動作するか確認してみてください。"
