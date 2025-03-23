@@ -5,22 +5,64 @@
   <title>禁忌の記憶 - ノベルゲーム</title>
   <style>
     body {
+      margin: 0;
+      padding: 0;
       background: #000;
       color: #fff;
       font-family: 'Arial', sans-serif;
-      margin: 0;
-      padding: 0;
+    }
+    /* スタート画面のスタイル */
+    #start-screen {
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
       height: 100vh;
+      text-align: center;
+      background: #000;
+    }
+    #start-screen img {
+      max-width: 80%;
+      height: auto;
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
+    #start-screen #prologue {
+      font-size: 24px;
+      margin-bottom: 20px;
+      padding: 0 20px;
+    }
+    #start-screen button {
+      padding: 10px 20px;
+      font-size: 18px;
+      background: #444;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    #start-screen button:hover {
+      background: #666;
+    }
+    /* ゲーム画面のスタイル */
+    #game-screen {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+    #game-screen img {
+      max-width: 80%;
+      height: auto;
+      border-radius: 10px;
+      margin-bottom: 20px;
     }
     #novel-container {
-      width: 80%;
+      width: 100%;
       max-width: 800px;
       background: rgba(0, 0, 0, 0.7);
       padding: 20px;
       border-radius: 10px;
+      text-align: center;
     }
     #dialogue {
       font-size: 20px;
@@ -33,8 +75,7 @@
     .choice-button {
       padding: 10px 20px;
       font-size: 18px;
-      margin-right: 10px;
-      margin-bottom: 10px;
+      margin: 5px;
       background: #444;
       border: none;
       border-radius: 5px;
@@ -57,55 +98,95 @@
   </style>
 </head>
 <body>
-  <div id="novel-container">
-    <div id="dialogue">物語がここから始まります...</div>
-    <div id="choices"></div>
-    <button id="next-button" onclick="nextDialogue()">次へ</button>
+  <!-- スタート画面 -->
+  <div id="start-screen">
+    <img src="path/to/start-image.jpg" alt="プロローグ画像">
+    <div id="prologue">
+      ここにプロローグのテキストを表示します。<br>
+      あなたはこの謎の館の真実を知るために、足を踏み入れた…
+    </div>
+    <button onclick="startGame()">ゲームスタート</button>
+  </div>
+
+  <!-- ゲーム画面 -->
+  <div id="game-screen">
+    <img src="path/to/game-image.jpg" alt="ゲーム中の画像">
+    <div id="novel-container">
+      <div id="dialogue">物語がここから始まります...</div>
+      <div id="choices"></div>
+      <button id="next-button" onclick="nextDialogue()">次へ</button>
+    </div>
   </div>
 
   <script>
+    // ノベルゲームのストーリー配列
     const story = [
-      { dialogue: "あなたは謎に包まれた古びた館の前に立っている。どちらから入る？", choices: [{ text: "正面玄関", next: 1 }, { text: "側面の扉", next: 2 }]},
-      { dialogue: "広いロビーが広がる。どちらに進む？", choices: [{ text: "左の回廊", next: 3 }, { text: "右の回廊", next: 4 }]},
-      { dialogue: "罠に掛かりゲームオーバー。", choices: null },
-      { dialogue: "不気味な気配が漂う。進む？", choices: [{ text: "奥へ進む", next: 5 }, { text: "立ち止まる", next: 6 }]},
-      { dialogue: "幻覚に襲われゲームオーバー。", choices: null },
-      { dialogue: "書斎に鍵がある。どうする？", choices: [{ text: "鍵を取る", next: 7 }, { text: "無視する", next: 8 }]},
-      { dialogue: "襲われてゲームオーバー。", choices: null },
-      { dialogue: "重い扉に到着。どうする？", choices: [{ text: "鍵を使う", next: 9 }, { text: "叩いてみる", next: 10 }]},
-      { dialogue: "罠でゲームオーバー。", choices: null },
-      { dialogue: "螺旋階段が現れる。進路は？", choices: [{ text: "上る", next: 11 }, { text: "下る", next: 12 }]},
-      { dialogue: "毒ガスが放たれゲームオーバー。", choices: null },
-      { dialogue: "謎の装置を発見。どうする？", choices: [{ text: "調べる", next: 13 }, { text: "部屋を出る", next: 14 }]},
-      { dialogue: "深淵に飲み込まれゲームオーバー。", choices: null },
-      { dialogue: "謎を解きゲームクリア！おめでとう！", choices: null },
-      { dialogue: "追い詰められゲームオーバー。", choices: null }
+      { dialogue: "あなたは謎に包まれた古びた館の前に立っている。どちらから入る？", choices: [{ text: "正面玄関", next: 1 }, { text: "側面の扉", next: 2 }] },
+      { dialogue: "広いロビーが広がる。どちらに進む？", choices: [{ text: "左の回廊", next: 3 }, { text: "右の回廊", next: 4 }] },
+      { dialogue: "罠に掛かり、あなたは命を落とした。ゲームオーバー.", choices: null },
+      { dialogue: "不気味な気配が漂う中、前に進むか、立ち止まるか？", choices: [{ text: "奥へ進む", next: 5 }, { text: "一旦立ち止まる", next: 6 }] },
+      { dialogue: "幻覚に襲われ、あなたは命を落とした。ゲームオーバー.", choices: null },
+      { dialogue: "埃をかぶった書斎に辿り着く。机の上には古びた鍵がある。どうする？", choices: [{ text: "鍵を取る", next: 7 }, { text: "無視する", next: 8 }] },
+      { dialogue: "背後からの足音で、あなたは襲われた。ゲームオーバー.", choices: null },
+      { dialogue: "重い扉に到着。扉には複雑な錠が掛かっている。どうする？", choices: [{ text: "鍵を使う", next: 9 }, { text: "扉を叩く", next: 10 }] },
+      { dialogue: "足元の罠にかかり、命を落とした。ゲームオーバー.", choices: null },
+      { dialogue: "鍵が合い、扉が開かれ、螺旋階段が現れる。どちらに進む？", choices: [{ text: "上る", next: 11 }, { text: "下る", next: 12 }] },
+      { dialogue: "仕掛けが作動し、毒ガスが放たれた。ゲームオーバー.", choices: null },
+      { dialogue: "螺旋階段を上り、最上階の部屋に入る。そこには謎の装置がある。どうする？", choices: [{ text: "装置を調べる", next: 13 }, { text: "部屋を出る", next: 14 }] },
+      { dialogue: "闇に包まれ、あなたは命を落とした。ゲームオーバー.", choices: null },
+      { dialogue: "装置の謎を解き、あなたは真実を掴んだ。おめでとう！ゲームクリア.", choices: null },
+      { dialogue: "追い詰められ、あなたは逃げ切れなかった。ゲームオーバー.", choices: null }
     ];
 
     let currentIndex = 0;
 
-    function nextDialogue() {
+    // スタート画面からゲーム画面に切り替え、ストーリーを初期化する
+    function startGame() {
+      currentIndex = 0;
+      document.getElementById('start-screen').style.display = 'none';
+      document.getElementById('game-screen').style.display = 'flex';
       updateDialogue();
     }
 
-    function updateDialogue() {
-      const dialogue = story[currentIndex];
-      document.getElementById('dialogue').innerText = dialogue.dialogue;
-
-      if (dialogue.choices) {
+    // 次のシーンに進む処理
+    function nextDialogue() {
+      // 選択肢がある場合は選択肢を表示する
+      if (story[currentIndex].choices) {
         document.getElementById('next-button').style.display = 'none';
-        showChoices(dialogue.choices);
+        showChoices(story[currentIndex].choices);
+        return;
+      }
+      // ゲームオーバーまたはゲームクリアの場合はスタート画面に戻るボタンを表示する
+      if (story[currentIndex].dialogue.includes("ゲームオーバー") || story[currentIndex].dialogue.includes("ゲームクリア")) {
+        document.getElementById('next-button').innerText = 'スタート画面に戻る';
+        document.getElementById('next-button').onclick = returnToStart;
+        document.getElementById('next-button').style.display = 'inline-block';
+        return;
+      }
+      // それ以外の場合は次のシーンへ
+      currentIndex++;
+      updateDialogue();
+    }
+
+    // シーンの内容を更新する
+    function updateDialogue() {
+      const dialogueObj = story[currentIndex];
+      document.getElementById('dialogue').innerText = dialogueObj.dialogue;
+      document.getElementById('choices').innerHTML = "";
+      if (dialogueObj.choices) {
+        document.getElementById('next-button').style.display = 'none';
+        showChoices(dialogueObj.choices);
       } else {
-        document.getElementById('choices').innerHTML = '';
-        document.getElementById('next-button').innerText = dialogue.dialogue.includes("ゲームオーバー") ? 'Restart' : '次へ';
-        document.getElementById('next-button').onclick = dialogue.dialogue.includes("ゲームオーバー") ? restartGame : () => { currentIndex++; updateDialogue(); };
+        document.getElementById('next-button').innerText = (dialogueObj.dialogue.includes("ゲームオーバー") || dialogueObj.dialogue.includes("ゲームクリア")) ? 'スタート画面に戻る' : '次へ';
+        document.getElementById('next-button').onclick = (dialogueObj.dialogue.includes("ゲームオーバー") || dialogueObj.dialogue.includes("ゲームクリア")) ? returnToStart : () => { currentIndex++; updateDialogue(); };
         document.getElementById('next-button').style.display = 'inline-block';
       }
     }
 
+    // 選択肢ボタンをランダムな順で表示する
     function showChoices(choices) {
       const choicesDiv = document.getElementById('choices');
-      choicesDiv.innerHTML = '';
+      choicesDiv.innerHTML = "";
       choices.sort(() => Math.random() - 0.5).forEach(choice => {
         const btn = document.createElement('button');
         btn.className = 'choice-button';
@@ -118,14 +199,14 @@
       });
     }
 
-    function restartGame() {
-      currentIndex = 0;
+    // ゲームオーバーまたはクリア時にスタート画面へ戻る
+    function returnToStart() {
+      document.getElementById('game-screen').style.display = 'none';
+      document.getElementById('start-screen').style.display = 'flex';
+      // 必要に応じて次のシーンボタンのテキスト・動作をリセット
       document.getElementById('next-button').innerText = '次へ';
       document.getElementById('next-button').onclick = nextDialogue;
-      updateDialogue();
     }
-
-    updateDialogue();
   </script>
 </body>
 </html>
