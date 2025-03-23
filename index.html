@@ -64,101 +64,48 @@
   </div>
 
   <script>
-    // ノベルゲームのストーリー配列（修正済み）
     const story = [
-      {
-        dialogue: "あなたは謎に包まれた古びた館の前に立っている。大きな正面玄関とひっそりとした側面の扉がある。どちらから入る？",
-        choices: [
-          { text: "正面玄関から入る", next: 1 },
-          { text: "側面の扉から入る", next: 2 }
-        ]
-      },
-      {
-        dialogue: "正面玄関から入ると、厳かな雰囲気の中、広いロビーが広がる。左と右、どちらの回廊に進む？",
-        choices: [
-          { text: "左の回廊に進む", next: 3 },
-          { text: "右の回廊に進む", next: 4 }
-        ]
-      },
-      { dialogue: "側面の扉から入った途端、罠が作動し、あなたは命を落とした。ゲームオーバー.", choices: null },
-      {
-        dialogue: "左の回廊を進むと、薄暗い音とともに不気味な気配が漂う。前に進むか、立ち止まるか？",
-        choices: [
-          { text: "奥へ進む", next: 5 },
-          { text: "一旦立ち止まる", next: 6 }
-        ]
-      },
-      { dialogue: "右の回廊は呪われた霧に包まれ、足を踏み入れた瞬間、幻覚に襲われ命を奪われた。ゲームオーバー.", choices: null },
-      {
-        dialogue: "奥へ進むと、埃をかぶった書斎に辿り着く。机の上には古びた鍵が置かれている。どうする？",
-        choices: [
-          { text: "鍵を取る", next: 7 },
-          { text: "無視して先へ進む", next: 8 }
-        ]
-      },
-      { dialogue: "一旦立ち止まったその瞬間、後ろから不気味な足音が近づき、あなたは襲われた。ゲームオーバー.", choices: null },
-      {
-        dialogue: "鍵を手にしたあなたは、重い扉の前に到着する。扉には複雑な錠が掛かっている。どうする？",
-        choices: [
-          { text: "鍵を使って扉を開ける", next: 9 },
-          { text: "扉を叩いてみる", next: 10 }
-        ]
-      },
-      { dialogue: "無視して先へ進んだ結果、足元の罠にかかり、命を落とした。ゲームオーバー.", choices: null },
-      {
-        dialogue: "扉は固く閉ざされていたが、鍵が合い、ゆっくりと開かれる。先には螺旋階段が現れる。どちらに進む？",
-        choices: [
-          { text: "螺旋階段を上る", next: 11 },
-          { text: "螺旋階段を下る", next: 12 }
-        ]
-      },
-      { dialogue: "扉を叩いた瞬間、仕掛けが作動し、激しい毒ガスが放たれた。ゲームオーバー.", choices: null },
-      {
-        dialogue: "螺旋階段を上り、最上階の部屋に入る。そこには真実の証拠が隠されているかのような、謎めいた装置がある。どうする？",
-        choices: [
-          { text: "装置を調べる", next: 13 },
-          { text: "そのまま部屋を出る", next: 14 }
-        ]
-      },
-      { dialogue: "螺旋階段を下りた先は闇に包まれ、あなたは深淵に飲み込まれた。ゲームオーバー.", choices: null },
-      { dialogue: "装置の謎を解いた瞬間、隠されていた秘密が明らかになり、あなたは真実を掴んだ。おめでとう！ゲームクリア.", choices: null },
-      { dialogue: "部屋を出た途端、背後から追い詰められ、あなたは逃げ切れなかった。ゲームオーバー.", choices: null }
+      { dialogue: "あなたは謎に包まれた古びた館の前に立っている。どちらから入る？", choices: [{ text: "正面玄関", next: 1 }, { text: "側面の扉", next: 2 }]},
+      { dialogue: "広いロビーが広がる。どちらに進む？", choices: [{ text: "左の回廊", next: 3 }, { text: "右の回廊", next: 4 }]},
+      { dialogue: "罠に掛かりゲームオーバー。", choices: null },
+      { dialogue: "不気味な気配が漂う。進む？", choices: [{ text: "奥へ進む", next: 5 }, { text: "立ち止まる", next: 6 }]},
+      { dialogue: "幻覚に襲われゲームオーバー。", choices: null },
+      { dialogue: "書斎に鍵がある。どうする？", choices: [{ text: "鍵を取る", next: 7 }, { text: "無視する", next: 8 }]},
+      { dialogue: "襲われてゲームオーバー。", choices: null },
+      { dialogue: "重い扉に到着。どうする？", choices: [{ text: "鍵を使う", next: 9 }, { text: "叩いてみる", next: 10 }]},
+      { dialogue: "罠でゲームオーバー。", choices: null },
+      { dialogue: "螺旋階段が現れる。進路は？", choices: [{ text: "上る", next: 11 }, { text: "下る", next: 12 }]},
+      { dialogue: "毒ガスが放たれゲームオーバー。", choices: null },
+      { dialogue: "謎の装置を発見。どうする？", choices: [{ text: "調べる", next: 13 }, { text: "部屋を出る", next: 14 }]},
+      { dialogue: "深淵に飲み込まれゲームオーバー。", choices: null },
+      { dialogue: "謎を解きゲームクリア！おめでとう！", choices: null },
+      { dialogue: "追い詰められゲームオーバー。", choices: null }
     ];
 
     let currentIndex = 0;
 
     function nextDialogue() {
-      if (story[currentIndex].choices) {
-        document.getElementById('next-button').style.display = 'none';
-        showChoices(story[currentIndex].choices);
-        return;
-      }
-      if (story[currentIndex].dialogue.includes("ゲームオーバー")) {
-        document.getElementById('next-button').innerText = 'Restart';
-        document.getElementById('next-button').onclick = restartGame;
-        document.getElementById('next-button').style.display = 'inline-block';
-        return;
-      }
-      currentIndex++;
       updateDialogue();
     }
 
     function updateDialogue() {
-      document.getElementById('dialogue').innerText = story[currentIndex].dialogue;
-      document.getElementById('choices').innerHTML = "";
-      document.getElementById('next-button').style.display = story[currentIndex].choices ? 'none' : 'inline-block';
-    }
+      const dialogue = story[currentIndex];
+      document.getElementById('dialogue').innerText = dialogue.dialogue;
 
-    function restartGame() {
-      currentIndex = 0;
-      document.getElementById('next-button').innerText = '次へ';
-      document.getElementById('next-button').onclick = nextDialogue;
-      updateDialogue();
+      if (dialogue.choices) {
+        document.getElementById('next-button').style.display = 'none';
+        showChoices(dialogue.choices);
+      } else {
+        document.getElementById('choices').innerHTML = '';
+        document.getElementById('next-button').innerText = dialogue.dialogue.includes("ゲームオーバー") ? 'Restart' : '次へ';
+        document.getElementById('next-button').onclick = dialogue.dialogue.includes("ゲームオーバー") ? restartGame : () => { currentIndex++; updateDialogue(); };
+        document.getElementById('next-button').style.display = 'inline-block';
+      }
     }
 
     function showChoices(choices) {
       const choicesDiv = document.getElementById('choices');
-      choicesDiv.innerHTML = "";
+      choicesDiv.innerHTML = '';
       choices.sort(() => Math.random() - 0.5).forEach(choice => {
         const btn = document.createElement('button');
         btn.className = 'choice-button';
@@ -169,6 +116,13 @@
         };
         choicesDiv.appendChild(btn);
       });
+    }
+
+    function restartGame() {
+      currentIndex = 0;
+      document.getElementById('next-button').innerText = '次へ';
+      document.getElementById('next-button').onclick = nextDialogue;
+      updateDialogue();
     }
 
     updateDialogue();
